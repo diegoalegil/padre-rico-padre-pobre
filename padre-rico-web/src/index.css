@@ -25,14 +25,16 @@ body {
               radial-gradient(ellipse 60% 30% at 90% 30%, rgba(57,217,138,0.05), transparent 60%),
               radial-gradient(ellipse 60% 30% at 10% 70%, rgba(255,122,51,0.04), transparent 60%),
               #08090f;
-  background-attachment: fixed;
   text-rendering: optimizeLegibility;
 }
 
 body::before {
   content: '';
-  position: fixed;
-  inset: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1180px;
   z-index: 0;
   pointer-events: none;
   background-image:
@@ -145,7 +147,7 @@ html.focus-mode body {
 
 @layer components {
   .card {
-    @apply rounded-lg border border-white/5 bg-ink-800/70 backdrop-blur-sm shadow-card;
+    @apply rounded-lg border border-white/5 bg-ink-800/85 shadow-card;
   }
   html.light .card {
     @apply bg-white/80 border-black/5 shadow-soft;
@@ -154,7 +156,7 @@ html.focus-mode body {
     @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium border;
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 font-medium transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 font-medium transition-colors duration-150 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-primary {
     @apply btn bg-gradient-to-br from-gold-400 to-gold-500 text-ink-950 hover:shadow-glow-gold;
@@ -184,7 +186,7 @@ html.focus-mode body {
     @apply focus-visible:ring-offset-cream;
   }
   .hover-lift {
-    @apply transition-all duration-300 hover:-translate-y-0.5 hover:shadow-glow-gold;
+    @apply transition-transform duration-200 hover:-translate-y-0.5;
   }
   .hero-grid {
     @apply absolute inset-0;
@@ -195,16 +197,16 @@ html.focus-mode body {
     mask-image: linear-gradient(to bottom, black 0%, black 68%, transparent 100%);
   }
   .hero-board {
-    @apply relative overflow-hidden rounded-lg border border-white/10 bg-ink-900/80 p-5 shadow-card backdrop-blur-xl sm:p-6;
+    @apply relative overflow-hidden rounded-lg border border-white/10 bg-ink-900/90 p-5 shadow-card sm:p-6;
+    contain: paint;
   }
   .hero-board::before {
     content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.09) 45%, transparent 58%);
-    transform: translateX(-120%);
-    animation: board-sheen 8s ease-in-out infinite;
+    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.07) 48%, transparent 64%);
+    opacity: 0.42;
   }
   html.light .hero-board {
     @apply border-black/10 bg-white/80 shadow-soft;
@@ -243,15 +245,6 @@ html.focus-mode body {
   main > section:not(#inicio) {
     content-visibility: auto;
     contain-intrinsic-size: 900px;
-  }
-}
-
-@keyframes board-sheen {
-  0%, 58%, 100% {
-    transform: translateX(-120%);
-  }
-  72% {
-    transform: translateX(120%);
   }
 }
 

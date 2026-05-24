@@ -122,10 +122,11 @@ export default function Hero() {
               {cashflowBars.map((height, index) => (
                 <motion.div
                   key={height}
-                  initial={{ height: 0 }}
-                  animate={{ height: `${height}%` }}
+                  initial={{ scaleY: 0 }}
+                  animate={{ scaleY: 1 }}
                   transition={{ duration: 0.65, delay: 0.2 + index * 0.06, ease: 'easeOut' }}
-                  className="flex-1 rounded-t-md bg-gradient-to-t from-gold-500 to-gold-200 shadow-glow-gold"
+                  className="flex-1 origin-bottom rounded-t-md bg-gradient-to-t from-gold-500 to-gold-200 shadow-soft"
+                  style={{ height: `${height}%` }}
                 />
               ))}
             </div>

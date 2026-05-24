@@ -76,8 +76,8 @@ export default function Navigation() {
     <>
       {/* Top bar */}
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          scrolled ? 'backdrop-blur-xl bg-ink-950/70 border-b border-white/5' : 'bg-transparent'
+        className={`fixed top-0 left-0 right-0 z-40 transition-colors duration-200 ${
+          scrolled ? 'bg-ink-950/95 border-b border-white/5' : 'bg-transparent'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center gap-3">
@@ -142,7 +142,7 @@ export default function Navigation() {
           <motion.nav
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="md:hidden border-t border-white/5 bg-ink-900/95 backdrop-blur-xl"
+            className="md:hidden border-t border-white/5 bg-ink-900/95"
           >
             <ul className="px-3 py-3 grid grid-cols-2 gap-1.5">
               {sections.map(({ id, label, icon: Icon }) => (
