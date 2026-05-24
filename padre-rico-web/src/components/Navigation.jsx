@@ -30,6 +30,7 @@ export default function Navigation() {
   }, [])
 
   useEffect(() => {
+    const observedIds = new Set()
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -38,11 +39,29 @@ export default function Navigation() {
       },
       { rootMargin: '-40% 0px -55% 0px', threshold: 0 },
     )
-    sections.forEach(({ id }) => {
-      const el = document.getElementById(id)
-      if (el) observer.observe(el)
-    })
-    return () => observer.disconnect()
+
+    const observeSections = () => {
+      sections.forEach(({ id }) => {
+        if (observedIds.has(id)) return
+        const el = document.getElementById(id)
+        if (!el) return
+        observer.observe(el)
+        observedIds.add(id)
+      })
+    }
+
+    observeSections()
+    const frame = requestAnimationFrame(observeSections)
+    const timeout = window.setTimeout(observeSections, 800)
+    const mutationObserver = new MutationObserver(observeSections)
+    mutationObserver.observe(document.querySelector('main') || document.body, { childList: true, subtree: true })
+
+    return () => {
+      cancelAnimationFrame(frame)
+      window.clearTimeout(timeout)
+      mutationObserver.disconnect()
+      observer.disconnect()
+    }
   }, [])
 
   const scrollTo = (id) => {

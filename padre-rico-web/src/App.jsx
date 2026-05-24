@@ -1,48 +1,95 @@
+import { lazy, Suspense, useEffect } from 'react'
 import { AppProvider } from './context/AppContext'
 import Navigation from './components/Navigation'
 import Hero from './components/Hero'
-import BookMap from './components/BookMap'
-import Comparator from './components/Comparator'
-import RatRaceSimulator from './components/RatRaceSimulator'
-import AssetLiabilityClassifier from './components/AssetLiabilityClassifier'
-import Lessons from './components/Lessons'
-import Obstacles from './components/Obstacles'
-import Quiz from './components/Quiz'
-import ActionPlan from './components/ActionPlan'
-import Glossary from './components/Glossary'
-import Closing from './components/Closing'
+
+const BookMap = lazy(() => import('./components/BookMap'))
+const Comparator = lazy(() => import('./components/Comparator'))
+const RatRaceSimulator = lazy(() => import('./components/RatRaceSimulator'))
+const AssetLiabilityClassifier = lazy(() => import('./components/AssetLiabilityClassifier'))
+const Lessons = lazy(() => import('./components/Lessons'))
+const Obstacles = lazy(() => import('./components/Obstacles'))
+const Quiz = lazy(() => import('./components/Quiz'))
+const ActionPlan = lazy(() => import('./components/ActionPlan'))
+const Glossary = lazy(() => import('./components/Glossary'))
+const Closing = lazy(() => import('./components/Closing'))
 
 export default function App() {
   return (
     <AppProvider>
       <div className="relative min-h-screen lg:pl-20">
         <Navigation />
+        <HashScrollRestorer />
         <main>
           <Hero />
           <Divider />
-          <BookMap />
+          <LazySection><BookMap /></LazySection>
           <Divider />
-          <Comparator />
+          <LazySection><Comparator /></LazySection>
           <Divider />
-          <RatRaceSimulator />
+          <LazySection><RatRaceSimulator /></LazySection>
           <Divider />
-          <AssetLiabilityClassifier />
+          <LazySection><AssetLiabilityClassifier /></LazySection>
           <Divider />
-          <Lessons />
+          <LazySection><Lessons /></LazySection>
           <Divider />
-          <Obstacles />
+          <LazySection><Obstacles /></LazySection>
           <Divider />
-          <Quiz />
+          <LazySection><Quiz /></LazySection>
           <Divider />
-          <ActionPlan />
+          <LazySection><ActionPlan /></LazySection>
           <Divider />
-          <Glossary />
+          <LazySection><Glossary /></LazySection>
           <Divider />
-          <Closing />
+          <LazySection><Closing /></LazySection>
         </main>
         <Footer />
       </div>
     </AppProvider>
+  )
+}
+
+function HashScrollRestorer() {
+  useEffect(() => {
+    const scrollToHash = () => {
+      if (!window.location.hash) return
+      const id = window.location.hash.slice(1)
+      const el = document.getElementById(id)
+      if (el) el.scrollIntoView({ block: 'start' })
+    }
+
+    const timers = [120, 500, 1000].map((delay) => window.setTimeout(scrollToHash, delay))
+    window.addEventListener('hashchange', scrollToHash)
+
+    return () => {
+      timers.forEach((timer) => window.clearTimeout(timer))
+      window.removeEventListener('hashchange', scrollToHash)
+    }
+  }, [])
+
+  return null
+}
+
+function LazySection({ children }) {
+  return (
+    <Suspense fallback={<SectionFallback />}>
+      {children}
+    </Suspense>
+  )
+}
+
+function SectionFallback() {
+  return (
+    <div className="px-4 sm:px-6 py-16 sm:py-24 focus-hide" aria-hidden="true">
+      <div className="max-w-6xl mx-auto">
+        <div className="section-loader">
+          <div className="section-loader-line w-24" />
+          <div className="section-loader-line w-2/3 h-8" />
+          <div className="section-loader-line w-full" />
+          <div className="section-loader-line w-5/6" />
+        </div>
+      </div>
+    </div>
   )
 }
 
